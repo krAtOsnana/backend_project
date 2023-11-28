@@ -1,0 +1,15 @@
+{
+  "name": "video_hosting",
+  "version": "1.0.0",
+  "description": "a backend project for video hosting",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [
+    "javascript",
+    "backend"
+  ],
+  "author": "Kushagra kumar",
+  "license": "ISC"
+}
