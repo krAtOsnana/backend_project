@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "a backend project for video hosting",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": ""
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",
     "backend"
   ],
   "author": "Kushagra kumar",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
