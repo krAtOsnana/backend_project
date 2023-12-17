@@ -18,7 +18,7 @@ const registerUser = asyncHandler( async (req, res) => {
     //destructuring all the necessary credentials of user provided in user model
     //which is required for user registering...    
     const {userName, fullName, email, password} = req.body
-
+    console.log("req.body: ",req.body);
    // console.log(`userName: ${userName}, \nfullName: ${fullName}, \nemail: ${email}`);
 
 
@@ -34,23 +34,37 @@ const registerUser = asyncHandler( async (req, res) => {
 
     //checking in mongoDB if user is already present or not 
     //by matching/checking userName or email
-    const existingUser = User.findOne({
+    const existingUser =await User.findOne({
         $or : [{userName} , {email}]
     })
     if(existingUser){
-        throw new ApiError(409,"user already have an account")
+        throw new ApiError(409,"user already have an account/already registered")
     }
 
 
     //handeling images and avatar
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    //console.log(req.file)
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
-    //checking for avatar, that avatar must be present
+    //const avatarLocalPath = req.files?.avatar[0]?.path;
+    let avatarLocalPath ;
+    if(req.files && Array.isArray(req.files.avatar) 
+    && req.files.avatar.length > 0){
+        avatarLocalPath = req.files.avatar[0].path ;
+    }
+
+      //checking for avatar, that avatar must be present
+      
+    
+   // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    //checking for cover image
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        coverImageLocalPath = req.files.coverImage[0].path ;
+    }
+
     if(!avatarLocalPath){
         throw new ApiError(400, "Avatar image is required")
     }
+   
 
     //upload avatar and other images to cloudinary which is preesent in multer
     //multer ->(localStorage:public/temp)
@@ -59,7 +73,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     //checking whethwe avatar is properly uploaded or not
 
-    if(!avatar){
+    if(!avatar ){
         throw new ApiError( 400 ,"Avatar is not properly uploaded on Cloudinary")
     }
 
@@ -85,7 +99,7 @@ const registerUser = asyncHandler( async (req, res) => {
 
     //returning responce if user is registered/creared successfully
     return res.status(201).json(
-        new ApiResponse(201, createdUser, "user has been succesfully registered")
+        new ApiResponse(201, createdUser, "user has been succesfully registered/created")
     )
 })
 
